@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenDatasetHub</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: #050816;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Background Glow */
+    .bg-glow {
+      position: fixed;
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(124,58,237,0.35), transparent 70%);
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 80px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      color: #b5b5b5;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 100px 20px 60px;
+    }
+
+    .hero h1 {
+      font-size: 72px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: #a855f7;
+    }
+
+    .hero p {
+      color: #9ca3af;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    /* Search */
+    .search-box {
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 18px 60px 18px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      outline: none;
+      backdrop-filter: blur(10px);
+      font-size: 16px;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 24px;
+      top: 18px;
+      font-size: 20px;
+      color: #9ca3af;
+    }
+
+    /* Tags */
+    .tags {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .tag {
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: #d1d5db;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .tag:hover {
+      background: #7c3aed;
+      color: white;
+    }
+
+    /* Grid */
+    .grid {
+      position: relative;
+      z-index: 10;
+      padding: 60px 80px 100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* Card */
+    .card {
+      position: relative;
+      padding: 28px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
+      transition: 0.35s;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left,
+      rgba(168,85,247,0.25),
+      transparent 60%);
+      opacity: 0;
+      transition: 0.35s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: #7c3aed;
+      box-shadow: 0 20px 50px rgba(124,58,237,0.2);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card h3 {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      color: #9ca3af;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .category {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(168,85,247,0.15);
+      color: #d8b4fe;
+      font-size: 14px;
+    }
+
+    .card i {
+      font-size: 24px;
+      color: #9ca3af;
+      transition: 0.3s;
+    }
+
+    .card:hover i {
+      color: #c084fc;
+    }
+
+    /* Footer */
+    .footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px;
+      color: #6b7280;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+
+      .navbar {
+        padding: 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .grid {
+        padding: 40px 24px 80px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">OpenDatasetHub</div>
+
+    <div class="nav-links">
+      <a href="#">首页</a>
+      <a href="#">数据集</a>
+      <a href="#">分类</a>
+      <a href="#">热门</a>
+      <a href="#">关于</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>
+      探索开放数据的
+      <span>无限可能</span>
+    </h1>
+
+    <p>
+      发现、连接并使用全球优质的开源数据集
+    </p>
+
+    <!-- Search -->
+    <div class="search-box">
+      <input type="text" placeholder="搜索数据集、关键词..." />
+      <i class="ri-search-line"></i>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags">
+      <div class="tag">计算机视觉</div>
+      <div class="tag">自然语言处理</div>
+      <div class="tag">电池与能源</div>
+      <div class="tag">医疗健康</div>
+      <div class="tag">时间序列</div>
+    </div>
+  </section>
+
+  <!-- Dataset Grid -->
+  <section class="grid">
+
+    <a class="card" href="https://image-net.org/" target="_blank">
+      <div class="card-top">
+        <h3>ImageNet</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>大型视觉识别数据集，用于图像分类研究。</p>
+
+      <span class="category">计算机视觉</span>
+    </a>
+
+    <a class="card" href="https://cocodataset.org/" target="_blank">
+      <div class="card-top">
+        <h3>COCO</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>目标检测与实例分割经典数据集。</p>
+
+      <span class="category">计算机视觉</span>
+    </a>
+
+    <a class="card" href="https://huggingface.co/datasets" target="_blank">
+      <div class="card-top">
+        <h3>HuggingFace</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>NLP 与 AI 开源数据集平台。</p>
+
+      <span class="category">自然语言处理</span>
+    </a>
+
+    <a class="card" href="https://www.kaggle.com/datasets" target="_blank">
+      <div class="card-top">
+        <h3>Kaggle</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>机器学习与数据竞赛平台。</p>
+
+      <span class="category">通用</span>
+    </a>
+
+    <a class="card" href="https://archive.ics.uci.edu/" target="_blank">
+      <div class="card-top">
+        <h3>UCI</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>经典机器学习数据库集合。</p>
+
+      <span class="category">机器学习</span>
+    </a>
+
+    <a class="card" href="https://www.batteryarchive.org/" target="_blank">
+      <div class="card-top">
+        <h3>Battery Archive</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>电池循环寿命与衰减数据库。</p>
+
+      <span class="category">电池与能源</span>
+    </a>
+
+    <a class="card" href="https://physionet.org/" target="_blank">
+      <div class="card-top">
+        <h3>PhysioNet</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>医学与生理信号开放数据库。</p>
+
+      <span class="category">医疗健康</span>
+    </a>
+
+    <a class="card" href="https://www.nasa.gov/" target="_blank">
+      <div class="card-top">
+        <h3>NASA Battery</h3>
+        <i class="ri-external-link-line"></i>
+      </div>
+
+      <p>NASA 电池寿命老化研究数据集。</p>
+
+      <span class="category">电池与能源</span>
+    </a>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2026 OpenDatasetHub. All rights reserved.
+  </footer>
+
+</body>
+</html>
